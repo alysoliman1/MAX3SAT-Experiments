@@ -10,13 +10,13 @@ of a list of 3-disjunctive clauses
 class instance {
     // Attributes
     public:
-        int num_variables;
         int num_clauses;
         clause **clauses;
+        std::set<int> variables;
 
     // Methods
     public:
-        instance(int num_variables, int num_clauses, clause **clauses);
+        instance(clause **clauses, int num_clauses);
 
         /*
         Check if a clause is in the instance
@@ -55,7 +55,8 @@ class instance {
 
         /*
         Returns a set of at most t variables that when flipped will give
-        a higher number of satisfied clauses than the zero assignment.
+        a higher number of satisfied clauses than the zero assignment (i.e these
+        variables are 'obstructions' to the zero assignment being a t-local max)
         Otherwise, if the zero assignment is a t-local maximum then the empty set
         is returned.
         */

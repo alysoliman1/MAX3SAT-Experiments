@@ -2,10 +2,15 @@
 #include <stdexcept>
 #include "instance.h"
 
-instance::instance(int num_variables, int num_clauses, clause **clauses){
-    instance::num_variables = num_variables;
-    instance::num_clauses = num_clauses;
+instance::instance(clause **clauses, int num_clauses){
     instance::clauses = clauses;
+    instance::num_clauses = num_clauses;
+    // Create set of variables used in the clauses
+    for (int i = 0; i < num_clauses; i++){
+        for (int j = 0; j < 3; j++){
+            instance::variables.insert(clauses[i]->variables[j]);
+        }
+    }
 }
 
 bool instance::contains(clause *c){
@@ -18,37 +23,30 @@ bool instance::contains(clause *c){
 }
 
 instance *instance::extend(clause *c){
-    /*
-    The state of an instance is assumed to satisfy the following
-    - Every clause is normalized
-    - If 0 <= i < instance::num_variables then there exists some clause in the
-    instance with (xi) or (not xi) as a literal
-    */
-
     int i;
-    int num_variables = instance::num_variables;
     int num_clauses = instance::num_clauses + 1;
-
-    // Increment the num_variables counter for every new variable
-    for (i = 0; i < 3; i++){
-        if (c->variables[i] >= instance::num_variables){
-            if (c->variables[i] > instance::num_variables + 3){
-                throw std::invalid_argument("Clause has variable indices higher than expected");
-            }
-            num_variables += 1;
-        }
-    }
-
-    // Create extended list of clauses
     clause** extended_clauses = (clause**) malloc(num_clauses * sizeof(clause *));
     for (i = 0; i < instance::num_clauses; i++){
         extended_clauses[i] = instance::clauses[i];
     }
     extended_clauses[i] = c;
-
-    return new instance(num_variables, num_clauses, extended_clauses);
+    return new instance(extended_clauses, num_clauses);
 }
 
+// See instance.h
+int instance::num_satisfied(int i, int j, int k){
+    int satisfied = 0;
+    for (int m = 0; m < instance::num_clauses; m++){
+        if (instance::clauses[m]->eval(i, j, k)){
+            satisfied += 1;
+        }
+    }
+    return satisfied;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Overloading the previous method for ease of use
+////////////////////////////////////////////////////////////////////////////////
 int instance::num_satisfied(){
     return instance::num_satisfied(-1, -1, -1);
 }
@@ -60,48 +58,50 @@ int instance::num_satisfied(int i){
 int instance::num_satisfied(int i, int j){
     return instance::num_satisfied(i, j, -1);
 }
-
-int instance::num_satisfied(int i, int j, int k){
-    int satisfied = 0;
-    for (int m = 0; m < instance::num_clauses; m++){
-        if (instance::clauses[m]->eval(i, j, k)){
-            satisfied += 1;
-        }
-    }
-    return satisfied;
-}
+////////////////////////////////////////////////////////////////////////////////
 
 std::set<int> instance::local_max_obstruction(int t){
-    int value;
-    std::set<int> indices;
+    // Set of variables to be returned
+    std::set<int> variables;
 
     // Number of satisfied clauses at the zero assignment 
     int zero_value = instance::num_satisfied();
 
-    for (int i = 0; i < instance::num_variables; i++){
-        // Number of clauses satisfied when xi is flipped to 1
-        value = instance::num_satisfied(i);
+    // Iterate through the variables used in the instance
+    int value;
+    std::set<int>::iterator var;
+    for (var = instance::variables.begin(); var != instance::variables.end(); var++){
+        // Number of clauses satisfied when the variable is flipped
+        value = instance::num_satisfied(*var);
 
-        // If flipping xi gives a higher number of satisfied clauses than the 
-        // zero assignment
+        // If flipping the variable gives a higher number of satisfied clauses
         if (value > zero_value){
-            indices.insert(i);
-            return indices;
-        }
-
-        // If we're only flipping upto 1 variable
-        if (t == 1){
-            continue;
-        }
-
-        for (int j = 0; j < i; j++){
-            value = instance::num_satisfied(i, j);
-            if (value > zero_value){
-                indices.insert(i);
-                indices.insert(j);
-                return indices;
-            }
+            variables.insert(*var);
+            return variables;
         }
     }
-    return indices;
+
+    // If we're only flipping upto 1 variable
+    if (t == 1){
+        return variables;
+    }
+
+    // Iterate through all pairs of variables
+    std::set<int>::iterator var1;
+    std::set<int>::iterator var2;
+    for (var1 = instance::variables.begin(); var1 != instance::variables.end(); var1++){
+        for (var2 = instance::variables.begin(); var2 != var1; var2++){
+            // Number of clauses satisfied when the two variables are flipped
+            value = instance::num_satisfied(*var1, *var2);
+        }
+
+        // If flipping the two variable gives a higher number of satisfied clauses
+        if (value > zero_value){
+            variables.insert(*var1);
+            variables.insert(*var2);
+            return variables;
+        }
+    }
+
+    return variables;
 }

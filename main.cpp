@@ -8,15 +8,12 @@ int main(){
     clause *clauses[1] = {
         new clause(false, 0, false, 1, false, 2)
     };
-    instance *initial_instance = new instance(3, 1, clauses);
+    instance *initial_instance = new instance(clauses, 1);
 
     // enqueue the initial instance in the queue
     std::queue<instance*> q;
     q.push(initial_instance);
 
-
-    int cases = 0;
-    int len = 0;
 
     // Variables to be used later in the procedure
     int k;
@@ -27,8 +24,6 @@ int main(){
     std::set<int>::iterator itr;
 
     while (!q.empty()){
-        std::cout << q.size() << " " << cases << " " << len << "\n";
-
         // Grab the next MAX3SAT instance from the queue
         maxsat = q.front();
         q.pop();
@@ -41,79 +36,12 @@ int main(){
         // Otherwise, if the zero assignment is a 2-local maximum then the
         // returned set will be empty.
         if (indices.empty()){
-            cases += 1;
-            if (len < maxsat->num_clauses){
-                len = maxsat->num_clauses;
-            }
-            
             delete maxsat;
             continue;
         }
 
-       // Procedure A
-        for (int i = 0; i < maxsat->num_variables; i++){
-            // Make sure i is not in indices
-            if (indices.count(i) == 1){
-                continue;
-            }
-            
-            // For k in indices
-            for (itr = indices.begin(); itr != indices.end(); itr++){
-                k = *itr;
-                c = new clause(false, i, false, maxsat->num_variables, true, k);
-                q.push(maxsat->extend(c));
-            }
-
-            for (int j = 0; j < i; j++){
-                // Make sure j is not in indices
-                if (indices.count(i) == 1){
-                    continue;
-                }
-
-                for (itr = indices.begin(); itr != indices.end(); itr++){
-                    k = *itr;
-                    // Create the new clause and check if it's not already in the instance
-                    c = new clause(false, i, false, j, true, k);
-                    if (maxsat->contains(c)){
-                        delete c;
-                        continue;
-                    }
-                    q.push(maxsat->extend(c));
-                }
-            }
-        }
-
-        for (itr = indices.begin(); itr != indices.end(); itr++){
-            k = *itr;
-            c = new clause(false, maxsat->num_variables, false, maxsat->num_variables + 1, true, k);
-            q.push(maxsat->extend(c));        
-        }
-
-        // Procedure B
-        if (indices.size() < 2){
-            continue;
-        }
-
-        itr = indices.begin();
-        int p = *itr;
-        itr++;
-        int k = *itr;
-
-        for (int i = 0; i < maxsat->num_variables; i++){
-            // Make sure i is not in indices
-            if (indices.count(i) == 1){
-                continue;
-            }
-
-           c = new clause(false, i, true, p, true, k); 
-           q.push(maxsat->extend(c));    
-        }
-
-        c = new clause(false, maxsat->num_variables, true, p, true, k);
-        q.push(maxsat->extend(c));         
-
-
     }
+
 
     return 0;
 }
