@@ -4,34 +4,42 @@
 #include "instance/instance.h"
 
 int main(){
-    // Create first clause and instance of MAX3SAT
-    clause *c = new clause(false, 0, false, 1, false, 2);
-    clause *clauses[1] = {c};
-    instance *first_instance = new instance(3, 1, clauses);
+    // Create initital instance of MAX3SAT containing the single clause 
+    clause *clauses[1] = {
+        new clause(false, 0, false, 1, false, 2)
+    };
+    instance *initial_instance = new instance(3, 1, clauses);
 
+    // enqueue the initial instance in the queue
     std::queue<instance*> q;
-    q.push(first_instance);
+    q.push(initial_instance);
 
-    bool clause_exists;
-    instance *maxsat;
-    std::set<int> indices;
-    std::set<int>::iterator itr;
-    int k;
 
     int cases = 0;
     int len = 0;
 
+    // Variables to be used later in the procedure
+    int k;
+    clause *c;
+    bool clause_exists;
+    instance *maxsat;
+    std::set<int> indices;
+    std::set<int>::iterator itr;
+
     while (!q.empty()){
         std::cout << q.size() << " " << cases << " " << len << "\n";
 
-        // dequeue q
+        // Grab the next MAX3SAT instance from the queue
         maxsat = q.front();
         q.pop();
 
-        // perform the procedure
+        // If the zero assignment is not a 2-local maximum then indices will
+        // contain a set of variables that when flipped will give a higher
+        // number of satisfied clauses than the zero assignment.
         indices = maxsat->local_max_obstruction(2);
 
-        // If the zero assignment is a 2-local maximum
+        // Otherwise, if the zero assignment is a 2-local maximum then the
+        // returned set will be empty.
         if (indices.empty()){
             cases += 1;
             if (len < maxsat->num_clauses){
@@ -41,34 +49,6 @@ int main(){
             delete maxsat;
             continue;
         }
-
-        /*
-        
-        Otherwise, if indices = {k} then we need to 
-
-        a or b or (not xk) where a and b are not k 
-
-        if indices = {k, p} then we need to add
-
-        a or b or (not xk) where a, b are not k or p (i.e not in indices)
-        a or b or (not xp) where a, b are k or p (i.e not in indices)
-        a or (not xk) or (not xp) (a not in indices)
-
-        --------------
-
-        Hence, in summary, 
-        A) For every k in indices, add a or b or xk where a and b are not in indices
-        There are three options
-        - one of a or b is new
-        - both a and b are variables in the instance
-        - both of a and b are new
-
-       B) Furthermore, if indices = {k, p} then add 
-       a or (not xk) or (not xp) (a not in indices) 
-
-       - a is in the instance
-       - a is new
-        */
 
        // Procedure A
         for (int i = 0; i < maxsat->num_variables; i++){
