@@ -1,4 +1,4 @@
-# A computer-assisted proof of a result on MAX3SAT Approximation using Local Search
+This repository hosts the code for a computer-assisted proof for a result on MAX3SAT approximation using local search.
 
 ## The 1-local case
 
