@@ -4,7 +4,8 @@
 #include "../clause/clause.h"
 
 /*
-An object representing an instance of the MAX3SAT problem
+An object representing an instance of the MAX3SAT problem. It primarly consists
+of a list of 3-disjunctive clauses
 */
 class instance {
     // Attributes
@@ -29,20 +30,20 @@ class instance {
         instance *extend(clause *c);
 
         /* 
-        Returns the number of clauses in the MAX3SAT instance satisfied on the
+        Returns the number of clauses in the MAX3SAT instance satisfied under the
         zero assignment
         */
         int num_satisfied();
 
         /*
-        Returns the number of clauses in the MAX3SAT instance satisfied on the
+        Returns the number of clauses in the MAX3SAT instance satisfied under the
         zero assignment with variable (xi) flipped to 1
         */
         int num_satisfied(int i);
 
         /*
-        Returns the number of clauses in the MAX3SAT instance satisfied on the
-        zero assignment with variable (xi) and (xj) flipped to 1
+        Returns the number of clauses in the MAX3SAT instance satisfied under the
+        zero assignment with variables (xi) and (xj) flipped to 1
         */
         int num_satisfied(int i, int j);
 
@@ -56,7 +57,7 @@ class instance {
         Returns a set of at most t variables that when flipped will give
         a higher number of satisfied clauses than the zero assignment.
         Otherwise, if the zero assignment is a t-local maximum then the empty set
-        is returned
+        is returned.
         */
         std::set<int> local_max_obstruction(int t);
 };
