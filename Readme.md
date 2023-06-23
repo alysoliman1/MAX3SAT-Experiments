@@ -1,4 +1,4 @@
-# MAX3SAT Approximation using Local Search
+# A computer-assisted proof of a result on MAX3SAT Approximation using Local Search
 
 ## The 1-local case
 
