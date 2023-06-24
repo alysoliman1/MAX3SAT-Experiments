@@ -24,6 +24,16 @@ a or b or (not xj)
 a or (not xi) or (not xj)
 ```
 
+Hence, we can apply the following procedure
+
+* For any variable `v` in `H` add all clauses of the form `a or b or (not v)`
+* If `H = {i, j}` then add all clauses of the form `a or (not i) or (not j)`
+
 where `a` and `b` are literals with no negations and no variable in `H`. 
 
 ## The 3-local case
+
+0 or 1 or 2
+not 0 or 1 or 2
+not 1 or 2 or 3
+0 or not 2 or 4

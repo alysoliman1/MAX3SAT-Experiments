@@ -20,6 +20,8 @@ class clause
     public:
         clause(bool n1, int v1, bool n2, int v2, bool n3, int v3);
 
+        void print();
+
         /*
         Evaluate the clause under the zero assignment
         */

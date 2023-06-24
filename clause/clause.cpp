@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include "clause.h"
 
 clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
@@ -28,6 +29,14 @@ clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
     }
 }
 
+void clause::print(){
+    const char *n1 = clause::negated[0] ? "not " : "";
+    const char *n2 = clause::negated[1] ? "not " : "";
+    const char *n3 = clause::negated[2] ? "not " : "";
+
+    std::cout << n1 << clause::variables[0] << " or " << n2 << clause::variables[1] << " or " << n3 << clause::variables[2] << "\n";
+}
+ 
 bool clause::eval(){
     return clause::eval(-1, -1, -1);
 }

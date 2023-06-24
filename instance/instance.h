@@ -18,6 +18,8 @@ class instance {
     public:
         instance(clause **clauses, int num_clauses);
 
+        void print();
+
         /*
         Check if a clause is in the instance
         */
@@ -60,7 +62,12 @@ class instance {
         Otherwise, if the zero assignment is a t-local maximum then the empty set
         is returned.
         */
-        std::set<int> local_max_obstruction(int t);
+        std::set<int> obstructions(int t);
 };
+
+/*
+Given a set of variables, create a variable not in the set
+*/
+int fresh_variable(std::set<int> variables);
 
 #endif

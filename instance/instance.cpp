@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdexcept>
+#include <iostream>
 #include "instance.h"
 
 instance::instance(clause **clauses, int num_clauses){
@@ -10,6 +11,12 @@ instance::instance(clause **clauses, int num_clauses){
         for (int j = 0; j < 3; j++){
             instance::variables.insert(clauses[i]->variables[j]);
         }
+    }
+}
+
+void instance::print(){
+    for (int i = 0; i < instance::num_clauses; i++){
+        instance::clauses[i]->print();
     }
 }
 
@@ -60,7 +67,8 @@ int instance::num_satisfied(int i, int j){
 }
 ////////////////////////////////////////////////////////////////////////////////
 
-std::set<int> instance::local_max_obstruction(int t){
+// See instance.h
+std::set<int> instance::obstructions(int t){
     // Set of variables to be returned
     std::set<int> variables;
 
@@ -93,15 +101,22 @@ std::set<int> instance::local_max_obstruction(int t){
         for (var2 = instance::variables.begin(); var2 != var1; var2++){
             // Number of clauses satisfied when the two variables are flipped
             value = instance::num_satisfied(*var1, *var2);
-        }
 
-        // If flipping the two variable gives a higher number of satisfied clauses
-        if (value > zero_value){
-            variables.insert(*var1);
-            variables.insert(*var2);
-            return variables;
+            // If flipping the two variable gives a higher number of satisfied clauses
+            if (value > zero_value){
+                variables.insert(*var1);
+                variables.insert(*var2); 
+                return variables;
+            }
         }
     }
 
     return variables;
+}
+
+int fresh_variable(std::set<int> variables){
+    if (!variables.empty()){
+        return *variables.rbegin() + 1;
+    }
+    return 0;
 }
