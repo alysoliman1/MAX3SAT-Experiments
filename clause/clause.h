@@ -1,5 +1,6 @@
 #ifndef CLAUSE_H
 #define CLAUSE_H
+#include <string>
 
 // A clause is a 3-disjunctive clause (i.e the disjunction of three literals).
 class clause
@@ -19,6 +20,8 @@ class clause
     // Methods
     public:
         clause(bool n1, int v1, bool n2, int v2, bool n3, int v3);
+
+        std::string latex();
 
         void print();
 

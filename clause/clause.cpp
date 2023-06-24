@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <format>
 #include "clause.h"
 
 clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
@@ -29,12 +30,22 @@ clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
     }
 }
 
-void clause::print(){
-    const char *n1 = clause::negated[0] ? "not " : "";
-    const char *n2 = clause::negated[1] ? "not " : "";
-    const char *n3 = clause::negated[2] ? "not " : "";
+std::string clause::latex(){  
+    std::string output;  
+    for (int i = 0; i < 3; i++){
+        output += (clause::negated[i] ? "\\neg " : "");
+        output +=  "x_";
+        output += std::to_string(clause::variables[i]);
+        if (i == 2){
+            continue;
+        }
+        output += " \\lor ";
+    }
+    return output;
+}
 
-    std::cout << n1 << clause::variables[0] << " or " << n2 << clause::variables[1] << " or " << n3 << clause::variables[2] << "\n";
+void clause::print(){
+    std::cout << clause::latex() << "\n";
 }
  
 bool clause::eval(){

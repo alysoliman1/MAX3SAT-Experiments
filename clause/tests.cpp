@@ -1,5 +1,6 @@
 #include <assert.h>
 #include "clause.h"
+#include <iostream>
 
 int main(){
     clause *c = new clause(false, 2, true, 1, false, 3);
@@ -40,4 +41,7 @@ int main(){
     assert(!clauses_equal(c1, c2));
     delete c1; 
     delete c2;
+
+    c = new clause(true, 1, false, 2, false, 3);
+    assert(c->latex() == "\\neg x_1 \\lor x_2 \\lor x_3");
 }

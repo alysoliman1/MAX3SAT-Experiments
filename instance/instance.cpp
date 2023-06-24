@@ -90,13 +90,12 @@ std::set<int> instance::obstructions(int t){
     }
 
     // If we're only flipping upto 1 variable
-    if (t == 1){
+    if (t < 2){
         return variables;
     }
 
     // Iterate through all pairs of variables
-    std::set<int>::iterator var1;
-    std::set<int>::iterator var2;
+    std::set<int>::iterator var1, var2;
     for (var1 = instance::variables.begin(); var1 != instance::variables.end(); var1++){
         for (var2 = instance::variables.begin(); var2 != var1; var2++){
             // Number of clauses satisfied when the two variables are flipped
@@ -107,6 +106,29 @@ std::set<int> instance::obstructions(int t){
                 variables.insert(*var1);
                 variables.insert(*var2); 
                 return variables;
+            }
+        }
+    }
+
+    if (t < 3){
+        return variables;
+    }
+
+    // Iterate through all triples of variables
+    std::set<int>::iterator var3;
+    for (var1 = instance::variables.begin(); var1 != instance::variables.end(); var1++){
+        for (var2 = instance::variables.begin(); var2 != var1; var2++){
+            for (var3 = instance::variables.begin(); var3 != var2; var3++){
+                // Number of clauses satisfied when the two variables are flipped
+                value = instance::num_satisfied(*var1, *var2, *var3);
+
+                // If flipping the two variable gives a higher number of satisfied clauses
+                if (value > zero_value){
+                    variables.insert(*var1);
+                    variables.insert(*var2); 
+                    variables.insert(*var3);
+                    return variables;
+                }
             }
         }
     }
