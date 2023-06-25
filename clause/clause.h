@@ -2,12 +2,16 @@
 #define CLAUSE_H
 #include <string>
 
-// A clause is a 3-disjunctive clause (i.e the disjunction of three literals).
+/*
+A clause is a 3-disjunctive clause (i.e the disjunction of three literals).
+*/ 
 class clause
 {
-    // Attributes
+    // Public Attributes
     public:
-        // An array storing the indices of the variables
+        /*
+        Variables are represented as integers        
+        */ 
         int variables[3];
 
         /*
@@ -15,14 +19,29 @@ class clause
         where variables = {1, 2, 3} and negated = {false, true, false}
         represents the clause (x1) or (not x2) or (x3) 
         */
-        bool negated[3];
+        bool negations[3];
     
-    // Methods
+    // Public Methods
     public:
+        /*
+        Example for class initialization:
+        
+        clause(false, 1, true, 2, false, 3);
+
+        creates an object corresponding to the clause
+
+        (x1) or (not x2) or (x3)
+        */
         clause(bool n1, int v1, bool n2, int v2, bool n3, int v3);
 
+        /*
+        Get a Latex expression for the clause
+        */
         std::string latex();
 
+        /*
+        Print the clause
+        */
         void print();
 
         /*
