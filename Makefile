@@ -1,8 +1,8 @@
 all: clause instance main clean
 
 main: main.cpp clause instance
-	@g++ -c main.cpp -o main.o
-	@g++ main.o clause.o instance.o -o main
+	@g++ -Wc++11-extensions -c main.cpp -o main.o
+	@g++ -Wc++11-extensions main.o clause.o instance.o -o main
 
 clause: clause/clause.cpp clause/clause.h clause/tests.cpp
 	@g++ -c clause/clause.cpp -o clause.o

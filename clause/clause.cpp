@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <format>
 #include "clause.h"
 
 clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
@@ -69,6 +68,9 @@ bool clause::eval(int i, int j, int k){
     return false;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Overloading the previous method for ease of use
+////////////////////////////////////////////////////////////////////////////////
 bool clause::eval(){
     return clause::eval(-1, -1, -1);
 }
@@ -80,6 +82,7 @@ bool clause::eval(int i){
 bool clause::eval(int i, int j){
     return clause::eval(i, j, -1);
 }
+////////////////////////////////////////////////////////////////////////////////
 
 bool clauses_equal(clause *c1, clause *c2){
     // The following procedure works since the clauses are "normalized" - see
