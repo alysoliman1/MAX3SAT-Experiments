@@ -40,8 +40,10 @@ class clause
         std::string latex();
 
         /*
-        Print the clause
+        Prints a latex expression representing the clause
         */
+        void print_latex();
+
         void print();
 
         /*

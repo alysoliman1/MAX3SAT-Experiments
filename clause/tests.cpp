@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "clause.h"
+#include "clause.hpp"
 #include <iostream>
 
 int main(){

@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include "clause.h"
+#include "clause.hpp"
 
 clause::clause(bool n1, int v1, bool n2, int v2, bool n3, int v3){
     // Buffer to store pre-sorted variables and negations
@@ -44,6 +44,10 @@ std::string clause::latex(){
 }
 
 void clause::print(){
+    clause::print_latex();
+}
+
+void clause::print_latex(){
     std::cout << clause::latex() << "\n";
 }
 
