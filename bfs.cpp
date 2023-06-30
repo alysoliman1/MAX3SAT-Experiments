@@ -19,10 +19,9 @@ void BFS(int hamming_radius){
         node = queue.front();
         queue.pop();
         children = node->children(hamming_radius);       
-        
+
         if (children->empty()){
-            std::cout << node->num_clauses() << "\n";
-            node->print();
+            node->print_latex();
             exit(0);
         }
 

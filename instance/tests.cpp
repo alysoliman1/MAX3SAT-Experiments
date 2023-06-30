@@ -18,7 +18,7 @@ int main(){
 
     instance *maxsat_extended = maxsat1->extend(new clause(false, 2, true, 1, false, 4));
     assert(maxsat_extended->num_clauses() == maxsat1->num_clauses() + 1);
-    assert(maxsat_extended->variables->size() == maxsat1->variables->size() + 1);
+    assert(maxsat_extended->vars->size() == maxsat1->vars->size() + 1);
 
     std::vector<clause *> clauses2;
     clauses2.push_back(new clause(false, 0, false, 1, false, 2));
@@ -54,13 +54,13 @@ int main(){
     assert(maxsat4->obstructions(2)->empty()); 
 
     std::set<int> variables;
-    assert(fresh_variable(&variables) == 0);
+    assert(fresh(&variables) == 0);
     variables.insert(0);
     variables.insert(1);
     variables.insert(2);
-    assert(fresh_variable(&variables) == 3);
+    assert(fresh(&variables) == 3);
     variables.insert(4);
-    assert(fresh_variable(&variables) == 5);
+    assert(fresh(&variables) == 5);
 
     return 0;
 }

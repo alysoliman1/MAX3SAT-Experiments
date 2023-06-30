@@ -10,7 +10,7 @@ of a list of 3-disjunctive clauses
 */
 class instance {
     public:
-        std::set<int> *variables;
+        std::set<int> *vars;
         std::vector<clause*> *clauses;
 
     public:
@@ -28,6 +28,12 @@ class instance {
         Check if a clause is in the instance
         */
         bool contains(clause *c);
+
+        /*
+        Return a new MAX3SAT instance object with all the clauses from the current
+        instance in addition to clause c
+        */
+        instance *extend(clause *c);
 
         /* 
         Returns the number of clauses in the MAX3SAT instance satisfied under the
@@ -63,12 +69,10 @@ class instance {
         */
         void print_latex();
 
+    /*
+    See the manuscript 
+    */
     public:
-        /*
-        Return a new MAX3SAT instance object with all the clauses from the current
-        instance in addition to clause c
-        */
-        instance *extend(clause *c);
 
         /*
         Returns a set of at most t variables that when flipped will give
@@ -79,15 +83,18 @@ class instance {
         */
         std::set<int> *obstructions(int t);
 
-        /*
-        See the manuscript 
-        */
+        std::vector<clause*> *NEG1(std::set<int> *obstructions, int v); 
+
+        std::vector<clause*> *NEG2(std::set<int> *obstructions, int v1, int v2); 
+
+        std::vector<clause*> *NEG3(std::set<int> *obstructions, int v1, int v2, int v3); 
+
         std::vector<instance*> *children(int hamming_radius);
 };
 
 /*
 Given a set of variables, create a variable not in the set
 */
-int fresh_variable(std::set<int> *variables);
+int fresh(std::set<int> *variables);
 
 #endif
