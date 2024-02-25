@@ -1,9 +1,8 @@
 all: clause instance bfs clean
 
 bfs: bfs.cpp clause instance
-	@rm bfs
 	@g++ -std=c++11 -c bfs.cpp -o bfs.o
-	@g++ -std=c++11 bfs.o clause.o instance.o search.o -o bfs
+	@g++ -std=c++11 bfs.o clause.o instance.o search.o -o build/bfs
 
 clause: clause/clause.cpp clause/clause.hpp clause/tests.cpp
 	@g++ -std=c++11 -c clause/clause.cpp -o clause.o
